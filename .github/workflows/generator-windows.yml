@@ -658,6 +658,19 @@ jobs:
         continue-on-error: true
         run: |
           mv ./SignOutput/rustdesk.msi "./SignOutput/${{ inputs.filename }}.msi" || echo "rustdesk"
+          
+      # --- EKLENEN KISIM BAŞLANGIÇ ---
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.filename }}-windows-client
+          path: |
+            ./SignOutput/${{ inputs.filename }}.exe
+            ./SignOutput/${{ inputs.filename }}.msi
+          if-no-files-found: warn
+          compression-level: 0 # Zaten ziplenmiş veya sıkıştırılmışsa vakit kazanmak için 0, değilse varsayılan bırakılabilir.
+      # --- EKLENEN KISIM BİTİŞ ---
+          
 
       - name: send file to rdgen server
         if: ${{ fromJson(inputs.extras).rdgen == 'true' }}
